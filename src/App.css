@@ -72,3 +72,38 @@
   --color-accent-900: #2d0612;
   --color-accent-950: #170309;
 }
+
+@layer components {
+  .background {
+    position: relative;
+    @apply bg-background-50;
+  }
+
+  .background:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/noise.png');
+    opacity: 0;
+  }
+
+  .noisy-background:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/noise.png');
+    opacity: .05;
+  } 
+
+  .noisy-background {
+    position: relative;
+    @apply bg-background-200;
+  }
+  
+}
