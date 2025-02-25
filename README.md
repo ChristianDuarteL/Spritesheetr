@@ -9,16 +9,16 @@ Spritesheetr is a tool that allows you to create css spritesheets from images. I
 ### Prerequisites
 
 - Node.js
-- npm
+- pnpm
 
 ### Installation
 
 1. Clone the repository
 2. Install dependencies
    ```sh
-   npm install
+   pnpm install
    ```
 3. Run the application
    ```sh
-   npm run dev
+   pnpm run dev
    ```
