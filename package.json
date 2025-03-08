@@ -13,12 +13,17 @@
     "@fontsource/inter": "^5.1.1",
     "@headlessui/react": "^2.2.0",
     "@tailwindcss/vite": "^4.0.8",
+    "clsx": "^2.1.1",
     "install": "^0.13.0",
+    "lucide-react": "^0.477.0",
     "npm": "^11.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
     "react-resizable-panels": "^2.1.7",
-    "tailwindcss": "^4.0.8"
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "^4.0.8",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

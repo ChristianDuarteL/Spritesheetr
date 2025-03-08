@@ -105,5 +105,8 @@
     position: relative;
     @apply bg-background-200;
   }
-  
+  .background > *,
+  .noisy-background > * {
+    z-index: 1;
+  }
 }
