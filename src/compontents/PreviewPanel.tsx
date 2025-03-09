@@ -48,7 +48,7 @@ export default function PreviewPanel() {
         y = 0;
         heightInRow = imagesArr[0][1].height;
         for (const [, image] of imagesArr) {
-            if (x + image.width >= width || heightInRow != image.height) {
+            if (x + image.width > width || heightInRow != image.height) {
                 x = 0;
                 heightInRow = image.height;
                 y += heightInRow;
