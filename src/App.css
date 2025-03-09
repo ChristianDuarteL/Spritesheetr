@@ -73,6 +73,20 @@
   --color-accent-950: #170309;
 }
 
+@layer utilities {
+  .scrollbar {
+    scrollbar-color: var(--scrollbar-bg) var(--scrollbar-fg);
+  }
+}
+
+@utility scrollbar-fg-* {
+  --scrollbar-fg: --value(--color-*, [color]);
+}
+
+@utility scrollbar-bg-* {
+  --scrollbar-bg: --value(--color-*, [color]);
+}
+
 @layer components {
   .background {
     position: relative;
