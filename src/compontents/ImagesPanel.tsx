@@ -25,8 +25,8 @@ export default function ImagesPanel() {
 
     return (
         <ResizablePanel title="Images" className="p-0">
-            <div className="w-full h-full relative p-4" {...getRootProps()}>
-                <div className="w-full grid grid-cols-3 gap-4">
+            <div className="w-full min-h-full relative" {...getRootProps()}>
+                <div className="w-full grid grid-cols-3 gap-4 p-4">
                     {Object.entries(images).map(([i, e]) => <ImagePanelItem key={i} id={i} image={e} setName={renameImage} delete={removeImage}/>)}
                 </div>
                 <input {...getInputProps()} className="hidden"/>
