@@ -8,6 +8,7 @@ import { PanelGroup } from 'react-resizable-panels';
 import ResizeHandle from './compontents/ResizeHandle';
 import ImagesPanel from './compontents/ImagesPanel';
 import { ImageProvider } from './providers/images';
+import PreviewPanel from './compontents/PreviewPanel';
 
 function App() {
   const [show, setShow] = useState(() => {
@@ -34,7 +35,9 @@ function App() {
               <ResizablePanel title="Properties">
               </ResizablePanel>
             </PanelGroup>
-            <Panel title='View'></Panel>
+            <Panel title='View'>
+              <PreviewPanel />
+            </Panel>
           </div>
         </div>}
       </div>
