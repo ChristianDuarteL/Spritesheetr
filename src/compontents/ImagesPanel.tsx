@@ -5,9 +5,10 @@ import { useCallback } from "react";
 import {useDropzone} from 'react-dropzone'
 import { Upload } from "lucide-react";
 import { makeFromFile } from "../lib/images";
+import Button from "./Button";
 
 export default function ImagesPanel() {
-    const { images, renameImage, addImage, removeImage } = useImages();
+    const { images, renameImage, addImage, removeImage, hasImages } = useImages();
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         console.log(acceptedFiles)
@@ -16,8 +17,9 @@ export default function ImagesPanel() {
         })
     }, [addImage]);
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+    const {getRootProps, getInputProps, isDragActive, open } = useDropzone({
         noClick: true,
+        accept: {"image/*": []},
         autoFocus: false,
         noKeyboard: true,
         onDrop
@@ -30,6 +32,13 @@ export default function ImagesPanel() {
                     {Object.entries(images).map(([i, e]) => <ImagePanelItem key={i} id={i} image={e} setName={renameImage} delete={removeImage}/>)}
                 </div>
                 <input {...getInputProps()} className="hidden"/>
+                { 
+                    !hasImages && 
+                    <div className="absolute w-full h-full top-0 left-0 bg-accent-300/40 flex items-center justify-center flex-col gap-2">
+                        <Button onClick={open}>Browse</Button>
+                        <span>Or drop your images here</span> 
+                    </div>
+                }
                 {
                     isDragActive && 
                     <div className="absolute w-full h-full top-0 left-0 bg-accent-300/40 flex items-center justify-center flex-col gap-2">

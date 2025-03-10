@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useCallback, useContext, useReducer } from "react";
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useReducer, useState } from "react";
 import { Image } from "../types";
 import { v1 as uuid } from "uuid";
 
@@ -60,12 +60,14 @@ interface ImageContextType {
     renameImage: (id: KeyType, newName: string) => void;
     addImage: (image: Image) => void;
     removeImage: (id: KeyType) => void;
+    hasImages: boolean;
 }
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
 
 export const ImageProvider: React.FC<{ children?: ReactNode | undefined }> = ({children}) => {
     const [images, dispatch] = useReducer(imageReducer, {});
+    const [hasImages, setHasImages] = useState(false);
     
     const renameImage = useCallback((id: KeyType, newName: string) => {
         dispatch({
@@ -93,9 +95,13 @@ export const ImageProvider: React.FC<{ children?: ReactNode | undefined }> = ({c
                 id
             }
         })
-    }, []) 
+    }, [])
 
-    return (<ImageContext.Provider value={{images, renameImage, addImage, removeImage}}>
+    useEffect(() => {
+        setHasImages(Object.keys(images).length > 0);
+    }, [images]);
+
+    return (<ImageContext.Provider value={{images, renameImage, addImage, removeImage, hasImages}}>
         {children}
     </ImageContext.Provider>)
 }
