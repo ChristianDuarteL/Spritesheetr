@@ -3,7 +3,7 @@ import { useImages } from "./images";
 import { Image } from "../types";
 import { SINGLE_COLUMN } from "../consts/arrangements";
 
-type Insets = [number, number, number, number];
+export type Insets = [number, number, number, number];
 
 export type Gap = [number, number];
 
@@ -21,6 +21,19 @@ export interface Size {
     height: number;
 }
 
+export interface SizeCalculationParams {
+    margin: Insets;
+    padding: Gap;
+    images: [string, Image][];
+}
+
+export interface ArrangementCalculationParams {
+    margin: Insets;
+    padding: Gap;
+    images: [string, Image][];
+    size: Size;
+}
+
 interface ArrangementContextType {
     autoArrange: boolean;
     setArrangementFunction: (arrangementFunction: ArrangementFunction) => void;
@@ -34,8 +47,8 @@ interface ArrangementContextType {
 }
 
 export interface ArrangementFunction {
-    calculateSize: (images: [string, Image][], padding: Gap) => Size;
-    arrangementCalculation: (images: [string, Image][], size: Size, padding: Gap) => Arrangement;
+    calculateSize: (params: SizeCalculationParams) => Size;
+    arrangementCalculation: (params: ArrangementCalculationParams) => Arrangement;
 }
 
 const defaultArrangementFunction: ArrangementFunction = SINGLE_COLUMN;
@@ -56,9 +69,17 @@ export const ArrangementProvider: React.FC<{ children?: React.ReactNode | undefi
         if (autoArrange) {
             const imagesArr = Object.entries(images);
             if (imagesArr.length === 0) return;
-            const size = arrangementFunction.calculateSize(imagesArr, padding);
+            const data = {
+                margin,
+                padding,
+                images: imagesArr
+            }
+            const size = arrangementFunction.calculateSize(data);
             setCalculatedSize(size);
-            setArrangement(arrangementFunction.arrangementCalculation(imagesArr, size, padding));
+            setArrangement(arrangementFunction.arrangementCalculation({
+                ...data,
+                size
+            }));
         }
     }, [autoArrange, images, margin, padding, arrangementFunction])
 

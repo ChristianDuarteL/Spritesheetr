@@ -25,7 +25,7 @@ export default function PreviewPanel() {
 
     return (
         <div className="flex items-center justify-center h-full">
-            <canvas className="max-w-full max-h-full" ref={canvasRef} />
+            <canvas className="max-w-full max-h-full border-1" ref={canvasRef} />
         </div>
     );
 }

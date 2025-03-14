@@ -1,8 +1,7 @@
-import { Arrangement, ArrangementFunction, Gap, Size } from "../providers/arrangement";
-import { Image } from "../types";
+import { Arrangement, ArrangementCalculationParams, ArrangementFunction, SizeCalculationParams } from "../providers/arrangement";
 
 export const BY_COVERAGE: ArrangementFunction = {
-    calculateSize: (images: [string, Image][], padding: Gap) => {
+    calculateSize: ({images, padding, margin}: SizeCalculationParams) => {
         const imageCountByWidth = new Map();
         const imageAreaByWidth = new Map();
         for (const [, image] of images) {
@@ -28,32 +27,32 @@ export const BY_COVERAGE: ArrangementFunction = {
             }
         }
         const count = Math.round(Math.sqrt(maxCount));
-        const width = Math.max(count * maxCountWidth + padding[0] * (count - 1), maxImageWidth);
+        const width = Math.max(count * maxCountWidth + padding[0] * (count - 1), maxImageWidth) + margin[1] + margin[3];
         let heightInRow = images[0][1].height;
-        let x = 0, y = heightInRow;
+        let x = margin[3], y = heightInRow;
         for (const [, image] of images) {
             x += image.width + padding[0];
-            if (x > width || heightInRow != image.height) {
-                x = image.width;
+            if (x > (width - margin[1]) || heightInRow != image.height) {
+                x = image.width + margin[3];
                 heightInRow = image.height;
                 y += heightInRow + padding[1];
             }
         }
         
-        return {width, height: y};
+        return {width, height: y + margin[0] + margin[2]};
     },
-    arrangementCalculation: (images: [string, Image][], {width}: Size, padding: Gap) => {
+    arrangementCalculation: ({images, padding, margin, size: { width }}: ArrangementCalculationParams) => {
         const arrangement: Arrangement = {};
-        let x = 0;
-        let y = 0;
+        let x = margin[3];
+        let y = margin[0];
         let heightInRow = images[0][1].height;
         for (const [key, image] of images) {
-            if (x + image.width > width || heightInRow != image.height) {
+            if (x + image.width > (width - margin[1]) || heightInRow != image.height) {
                 y += heightInRow + padding[1];
-                x = image.width + padding[0];
+                x = image.width + padding[0] + margin[3];
                 heightInRow = image.height;
                 arrangement[key] = {
-                    x: 0,
+                    x: margin[3],
                     y,
                     width: image.width,
                     height: image.height
@@ -73,8 +72,8 @@ export const BY_COVERAGE: ArrangementFunction = {
 }
 
 export const SINGLE_ROW: ArrangementFunction = {
-    calculateSize: (images: [string, Image][], padding: Gap) => {
-        let width = -padding[0];
+    calculateSize: ({images, padding, margin}: SizeCalculationParams) => {
+        let width = -padding[0] + margin[1] + margin[3];
         let maxHeight = 0;
         for (const [, image] of images) {
             width += image.width + padding[0];
@@ -82,15 +81,15 @@ export const SINGLE_ROW: ArrangementFunction = {
                 maxHeight = image.height;
             }
         }
-        return {width, height: maxHeight};
+        return {width, height: maxHeight + margin[0] + margin[2]};
     },
-    arrangementCalculation: (images: [string, Image][], _: Size, padding: Gap) => {
+    arrangementCalculation: ({images, padding, margin}: ArrangementCalculationParams) => {
         const arrangement: Arrangement = {};
-        let x = 0;
+        let x = margin[3];
         for (const [key, image] of images) {
             arrangement[key] = {
                 x,
-                y: 0,
+                y: margin[0],
                 width: image.width,
                 height: image.height
             }
@@ -101,8 +100,8 @@ export const SINGLE_ROW: ArrangementFunction = {
 }
 
 export const SINGLE_COLUMN: ArrangementFunction = {
-    calculateSize: (images: [string, Image][], padding: Gap) => {
-        let height = -padding[1];
+    calculateSize: ({images, padding, margin}: SizeCalculationParams) => {
+        let height = -padding[1] + margin[0] + margin[2];
         let maxWidth = 0;
         for (const [, image] of images) {
             height += image.height + padding[1];
@@ -110,15 +109,15 @@ export const SINGLE_COLUMN: ArrangementFunction = {
                 maxWidth = image.width;
             }
         }
-        return {height, width: maxWidth};
+        return {height, width: maxWidth + margin[1] + margin[3]};
     },
-    arrangementCalculation: (images: [string, Image][], _, padding: Gap) => {
+    arrangementCalculation: ({images, padding, margin}: ArrangementCalculationParams) => {
         const arrangement: Arrangement = {};
-        let y = 0;
+        let y = margin[0];
         for (const [key, image] of images) {
             arrangement[key] = {
                 y,
-                x: 0,
+                x: margin[3],
                 width: image.width,
                 height: image.height
             }
